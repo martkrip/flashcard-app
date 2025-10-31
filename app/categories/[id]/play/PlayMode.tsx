@@ -9,7 +9,7 @@ type Card = {
   answer: string;
 };
 
-export default function PlayMode({ cards }: { cards?: Card[] }) {
+export default function PlayMode({ cards = [] }: { cards?: Card[] }) {
   const [index, setIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
   const [result, setResult] = useState("");
@@ -41,7 +41,7 @@ export default function PlayMode({ cards }: { cards?: Card[] }) {
           </button>
           <button
             onClick={() => {
-              const firstIndex = Math.floor(Math.random() * cards.length)
+              const firstIndex = Math.floor(Math.random() * cards.length);
               setMode("random");
               setUsedIndices([]);
               setIndex(firstIndex);
@@ -76,17 +76,14 @@ export default function PlayMode({ cards }: { cards?: Card[] }) {
     const newStats = isCorrect
       ? { ...stats, correct: stats.correct + 1 }
       : { ...stats, incorrect: stats.incorrect + 1 };
-    
-    setStats(newStats);
-    
-    await saveAttempt(currentCard.id, currentCard.category_id!, isCorrect);
 
+    setStats(newStats);
+
+    await saveAttempt(currentCard.id, currentCard.category_id!, isCorrect);
 
     setUserAnswer("");
     setResult(
-      isCorrect
-        ? "Correct!"
-        : `WRONG. Correct answer: ${currentCard.answer}`
+      isCorrect ? "Correct!" : `WRONG. Correct answer: ${currentCard.answer}`
     );
 
     setTimeout(() => {
@@ -107,7 +104,7 @@ export default function PlayMode({ cards }: { cards?: Card[] }) {
       const updatedUsedCard = usedIndices.includes(index)
         ? usedIndices
         : [...usedIndices, index];
-      
+
       const available = cards
         .map((_, i) => i)
         .filter((i) => !updatedUsedCard.includes(i));
@@ -141,8 +138,6 @@ export default function PlayMode({ cards }: { cards?: Card[] }) {
     setUserAnswer("");
     setUsedIndices([]);
   }
-
-  
 
   return (
     <div className="max-w-lg mx-auto p-6">
